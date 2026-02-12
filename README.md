@@ -1,10 +1,41 @@
 # Classification Model Analysis
 
 ## Problem Statement
-This project implements and compares multiple classification models on a selected dataset to evaluate their performance using various metrics including accuracy, AUC, precision, recall, F1-score, and Matthews Correlation Coefficient (MCC).
+This project implements and compares multiple classification models to predict whether a bank client will subscribe to a term deposit based on marketing campaign data. The goal is to evaluate and compare the performance of six different machine learning algorithms using comprehensive metrics including accuracy, AUC, precision, recall, F1-score, and Matthews Correlation Coefficient (MCC).
 
 ## Dataset Description
-[To be updated after dataset selection]
+
+**Dataset:** Bank Marketing Dataset (UCI Machine Learning Repository)  
+**Source:** https://archive.ics.uci.edu/ml/datasets/Bank+Marketing
+
+### Overview:
+- **Total Instances:** 41,188
+- **Total Features:** 21 (20 input features + 1 target variable)
+- **Classification Type:** Binary Classification
+- **Target Variable:** Client subscription to term deposit (yes/no)
+
+### Features:
+The dataset contains information about bank clients and their interactions with marketing campaigns:
+
+**Client Information:**
+- age, job, marital status, education level, credit default status, account balance
+
+**Campaign Information:**
+- contact type, contact day/month, contact duration, number of contacts
+- days since previous contact, previous campaign outcome
+
+**Economic Indicators:**
+- employment variation rate, consumer price index, consumer confidence index
+- euribor 3 month rate, number of employees
+
+### Target Variable:
+- **0:** Client did not subscribe to term deposit
+- **1:** Client subscribed to term deposit
+
+### Data Quality:
+- No missing values after preprocessing
+- Categorical variables encoded numerically
+- Dataset is relatively imbalanced (typical for marketing data)
 
 ## Models Used
 
@@ -41,12 +72,32 @@ classification-model-analysis/
 ```
 
 ## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/bips1996/classification-model-analysis.git
+cd classification-model-analysis
+```
+
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
+3. Download the dataset:
+```bash
+python download_data.py
+```
+
 ## Usage
-Run the Streamlit app:
+
+### Train Models (for development)
+```bash
+jupyter notebook model/data_exploration.ipynb
+jupyter notebook model/train_models.ipynb
+```
+
+### Run Streamlit App
 ```bash
 streamlit run app.py
 ```
