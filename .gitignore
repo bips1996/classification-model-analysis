@@ -1,23 +1,76 @@
 # Python
 __pycache__/
-.venv
+*.py[cod]
+*$py.class
+*.so
+*.pyc
+.venv/
+venv/
+env/
+ENV/
 
+# Distribution / packaging
+.Python
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
+**/.ipynb_checkpoints/
+*.ipynb_checkpoints
 
+# Data files (downloaded by script, not tracked)
 data/*.csv
 data/*.zip
 data/*.json
 data/*.xlsx
+data/*.xls
 data/bank-additional/
 !data/.gitkeep
 
+# Trained model files (large binary files)
 model/*.pkl
 model/*.joblib
 model/*.h5
 model/*.model
 model/*.sav
 
+# Logs and temporary files
 *.log
 *.tmp
 *.temp
+*.bak
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Python cache
+.pytest_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+*.cover
+
+# Environment variables
+.env
+.env.local
