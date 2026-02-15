@@ -4,11 +4,23 @@ Assignment 2 - Machine Learning
 """
 
 import streamlit as st
+
+# Page configuration - MUST be first Streamlit command
+st.set_page_config(
+    page_title="Classification Model Analysis",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 import pandas as pd
 import numpy as np
 import pickle
 import joblib
 import os
+import subprocess
+import sys
+from pathlib import Path
 from sklearn.metrics import (
     accuracy_score, 
     roc_auc_score, 
@@ -24,13 +36,83 @@ import plotly.graph_objects as go
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Page configuration
-st.set_page_config(
-    page_title="Classification Model Analysis",
-    page_icon="📊",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# Auto-setup: Download data and train models if not present
+@st.cache_data
+def check_setup_status():
+    """Check if data and models exist"""
+    data_exists = os.path.exists('data/X_train.csv') and os.path.exists('data/y_train.csv')
+    models_exist = all([
+        os.path.exists('model/logistic_regression.pkl'),
+        os.path.exists('model/decision_tree.pkl'),
+        os.path.exists('model/knn.pkl'),
+        os.path.exists('model/naive_bayes.pkl'),
+        os.path.exists('model/random_forest.pkl'),
+        os.path.exists('model/xgboost.pkl')
+    ])
+    return data_exists, models_exist
+
+def setup_if_needed():
+    """
+    Automatically download data and train models if they don't exist
+    """
+    data_exists, models_exist = check_setup_status()
+    
+    if not data_exists:
+        with st.spinner("📥 Downloading dataset... This may take a moment."):
+            try:
+                result = subprocess.run([sys.executable, 'download_data.py'], 
+                                      check=True, 
+                                      capture_output=True, 
+                                      text=True)
+                st.success("✅ Dataset downloaded successfully!")
+                st.cache_data.clear()  # Clear cache to recheck
+            except subprocess.CalledProcessError as e:
+                st.error(f"❌ Error downloading data: {e.stderr}")
+                with st.expander("Show error details"):
+                    st.code(e.stderr)
+                st.stop()
+    
+    if not models_exist:
+        st.info("🤖 Training models for the first time... This will take a few minutes.")
+        progress_bar = st.progress(0, text="Initializing training...")
+        
+        try:
+            # Run training script
+            process = subprocess.Popen(
+                [sys.executable, 'train_models.py'],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                bufsize=1
+            )
+            
+            # Show progress
+            model_count = 0
+            for line in process.stdout:
+                if "Training" in line:
+                    model_count += 1
+                    model_name = line.split("Training")[1].split("...")[0].strip()
+                    progress = min(model_count / 6.0, 1.0)
+                    progress_bar.progress(progress, text=f"Training {model_name}...")
+            
+            # Wait for completion
+            stdout, stderr = process.communicate()
+            
+            if process.returncode == 0:
+                progress_bar.progress(1.0, text="Training complete!")
+                st.success("✅ All models trained successfully!")
+                st.cache_data.clear()  # Clear cache to recheck
+            else:
+                st.error(f"❌ Error training models.")
+                with st.expander("Show error details"):
+                    st.code(stderr if stderr else stdout)
+                st.stop()
+        except Exception as e:
+            st.error(f"❌ Error training models: {str(e)}")
+            st.stop()
+
+# Run setup check
+setup_if_needed()
 
 # Custom CSS
 st.markdown("""
