@@ -71,35 +71,73 @@ classification-model-analysis/
 │-- data/ (dataset files)
 ```
 
-## Installation
+## Installation & Deployment
 
-1. Clone the repository:
+### Quick Start (Single Command Deployment)
+
+**The easiest way to run this project:**
+
+```bash
+# Clone the repository
+git clone https://github.com/bips1996/classification-model-analysis.git
+cd classification-model-analysis
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the app (automatically downloads data and trains models on first run)
+streamlit run app.py
+```
+
+That's it! The app will:
+1. ✅ Automatically download the dataset if not present
+2. ✅ Automatically train all 6 models if not present
+3. ✅ Launch the interactive web application
+
+### Manual Setup (Optional)
+
+If you prefer to run steps separately:
+
+1. **Clone the repository:**
 ```bash
 git clone https://github.com/bips1996/classification-model-analysis.git
 cd classification-model-analysis
 ```
 
-2. Install dependencies:
+2. **Install dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Download the dataset:
+3. **Download the dataset:**
 ```bash
 python download_data.py
 ```
 
+4. **Train models:**
+```bash
+python train_models.py
+```
+
+5. **Run the app:**
+```bash
+streamlit run app.py
+```
+
 ## Usage
 
-### Train Models (for development)
+### Streamlit Web Application
+The app provides an interactive interface to:
+- Select from 6 trained classification models
+- Upload custom CSV files or use sample data
+- View comprehensive evaluation metrics
+- Analyze confusion matrices and classification reports
+
+### Development/Analysis
+For exploration and development:
 ```bash
 jupyter notebook model/data_exploration.ipynb
 jupyter notebook model/train_models.ipynb
-```
-
-### Run Streamlit App
-```bash
-streamlit run app.py
 ```
 
 ## Live Demo

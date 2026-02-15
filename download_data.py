@@ -3,6 +3,7 @@ import pandas as pd
 import urllib.request
 import zipfile
 from pathlib import Path
+from sklearn.model_selection import train_test_split
 
 def download_bank_marketing_dataset():
     """
@@ -45,6 +46,25 @@ def download_bank_marketing_dataset():
         output_path = data_dir / 'bank_marketing.csv'
         df.to_csv(output_path, index=False)
         
+        # Create train-test split
+        print("\n📂 Creating train-test split...")
+        X = df.drop('target', axis=1)
+        y = df['target']
+        
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2, random_state=42, stratify=y
+        )
+        
+        # Save split data
+        X_train.to_csv(data_dir / 'X_train.csv', index=False)
+        X_test.to_csv(data_dir / 'X_test.csv', index=False)
+        y_train.to_csv(data_dir / 'y_train.csv', index=False)
+        y_test.to_csv(data_dir / 'y_test.csv', index=False)
+        
+        print(f"✅ Train-test split completed!")
+        print(f"  - Training: {X_train.shape[0]} samples")
+        print(f"  - Testing: {X_test.shape[0]} samples")
+        
         print(f"\n✅ Dataset processed successfully!")
         print(f"📊 Dataset shape: {df.shape}")
         print(f"💾 Saved to: {output_path}")
@@ -75,11 +95,20 @@ if __name__ == "__main__":
     print("📦 Bank Marketing Dataset Downloader")
     print("=" * 60)
     
-    # Check if dataset already exists
-    if Path('data/bank_marketing.csv').exists():
-        print("Dataset already exists at data/bank_marketing.csv")
+    # Check if dataset and split files already exist
+    split_files_exist = all([
+        Path('data/X_train.csv').exists(),
+        Path('data/X_test.csv').exists(),
+        Path('data/y_train.csv').exists(),
+        Path('data/y_test.csv').exists()
+    ])
+    
+    if Path('data/bank_marketing.csv').exists() and split_files_exist:
+        print("Dataset and split files already exist!")
         df = pd.read_csv('data/bank_marketing.csv')
         print(f"📊 Dataset shape: {df.shape}")
+        X_train = pd.read_csv('data/X_train.csv')
+        print(f"✅ Training samples: {X_train.shape[0]}")
     else:
         # Try to download Bank Marketing dataset
         success = download_bank_marketing_dataset()
@@ -91,4 +120,4 @@ if __name__ == "__main__":
             print("Visit: https://archive.ics.uci.edu/ml/datasets/Bank+Marketing")
             print("Download and place 'bank-additional-full.csv' in data/ folder")
     
-    print("\n✨ Ready to proceed with data exploration!")
+    print("\n✨ Ready to proceed with model training!")
