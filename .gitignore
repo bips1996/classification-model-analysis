@@ -46,6 +46,8 @@ model/*.joblib
 model/*.h5
 model/*.model
 model/*.sav
+model/*.json
+model/*checkpoint*
 
 # Keep results and visualizations (needed for README and submission)
 !model/model_comparison.csv
@@ -58,6 +60,11 @@ model/*.sav
 *.temp
 *.bak
 *~
+model/*.tmp
+model/*.temp
+model/*.log
+model_backup/
+**/model_backup/
 
 # OS files
 .DS_Store
