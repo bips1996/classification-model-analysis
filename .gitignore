@@ -47,6 +47,11 @@ model/*.h5
 model/*.model
 model/*.sav
 
+# Keep results and visualizations (needed for README and submission)
+!model/model_comparison.csv
+!model/performance_comparison.png
+!model/confusion_matrices.png
+
 # Logs and temporary files
 *.log
 *.tmp
